@@ -25,6 +25,27 @@ function ProfileSidebar(props) {
   )
 }
 
+function ProfileRelationsBox(props) {
+  return (
+    <ProfileRelationsBoxWrapper>
+            <h2 className="smallTitle">
+            {props.title} ({props.items.length})
+            </h2>
+             <ul>
+              {props.items.map((currentItem) => {
+                return (
+                  <li key={currentItem.login}>
+                    <a href={`https://github.com/${currentItem.login}`} target= '_blank' >
+                      {<img src={`https://github.com/${currentItem.login}.png`} alt="Perfil Usuário" className="imgProfile" />}
+                      <span>{currentItem.login}</span>
+                    </a>
+                  </li>
+                )
+              }).slice(0,6)}
+            </ul>
+          </ProfileRelationsBoxWrapper>
+  )
+}
 
 export default function Home() {
   const [communities, setCommunities] = React.useState([])
@@ -35,6 +56,16 @@ export default function Home() {
     'peas',
     'rafaballerini',
   ]
+
+  const [followers, setFollowers] = React.useState([])
+
+  React.useEffect(() => {
+    fetch('https://api.github.com/users/lailsonlm/followers').then((res) => res.json()).then((res) => setFollowers(res))
+  }, [])
+  
+  console.log(followers.map((currentItem) => {
+   return currentItem.login
+  }))
 
   function CreateCommunity(event) {
     event.preventDefault()
@@ -51,7 +82,7 @@ export default function Home() {
 
   return (
     <>
-      <AlurakutMenu />
+      <AlurakutMenu githubUser={user}/>
       <MainGrid>
         <DivGrid className="profileArea">
           <ProfileSidebar user={user} />
@@ -90,6 +121,8 @@ export default function Home() {
         </DivGrid>
 
         <DivGrid className="profileRelations">
+          <ProfileRelationsBox title="Seguidores" items={followers}/>
+
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({communities.length})
