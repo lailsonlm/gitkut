@@ -25,7 +25,7 @@ export function AlurakutMenu({ githubUser }) {
   return (
     <AlurakutMenu.Wrapper isMenuOpen={isMenuOpen}>
       <div className="container">
-        <AlurakutMenu.Logo src={`${BASE_URL}/logo.svg`} />
+        <AlurakutMenu.Logo src="gitkut_logo.svg" />
 
         <nav style={{ flex: 1 }}>
           {[{ name: 'Inicio', slug: '/'}, {name: 'Amigos', slug: '/amigos'}, {name: 'Comunidades', slug: '/comunidades'}].map((menuItem) => (
@@ -55,7 +55,7 @@ export function AlurakutMenu({ githubUser }) {
 }
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
-  background-color: #308BC5;
+  background-color: #2D333B;
   .alurakutMenuProfileSidebar {
     background: white;
     position: fixed;
@@ -94,12 +94,13 @@ AlurakutMenu.Wrapper = styled.header`
     }
   }
   .container {
-    background-color: #308BC5;
+    background-color: #2D333B;
     padding: 7px 16px;
     max-width: 1110px;
     margin: auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     position: relative;
     z-index: 101;
     @media(min-width: 860px) {
@@ -127,11 +128,11 @@ AlurakutMenu.Wrapper = styled.header`
         text-decoration: none;
         &:after {
           content: " ";
-          background-color: #5292C1;
+          background-color: #5A5A5A;
           display: block;
           position: absolute;
           width: 1px;
-          height: 12px;
+          height: 15px;
           margin: auto;
           left: 0;
           top: 0;
@@ -140,27 +141,26 @@ AlurakutMenu.Wrapper = styled.header`
       }
     }
     input {
-      color: #ffffff;
-      background: #5579A1;
+      color: #ADBAC7;
+      background: #1F242B;
       padding: 10px 42px;
       border: 0;
       background-image: url(${`${BASE_URL}/icons/search.svg`});
       background-position: 15px center;
       background-repeat: no-repeat;
+      border: 1px solid #373E47;
       border-radius: 1000px;
       font-size: 12px;
       ::placeholder {
-        color: #ffffff;
+        color: #5A5A5A;
         opacity: 1;
       }
     } 
   }
 `;
 AlurakutMenu.Logo = styled.img`
-  background-color: #ffffff;
-  padding: 9px 14px;
-  border-radius: 1000px;
-  height: 34px;
+  padding: 7px 14px;
+  height: 36px;
 `;
 
 function AlurakutMenuProfileSidebar({ githubUser }) {
@@ -319,20 +319,21 @@ OrkutNostalgicIconSet.List = styled.ul`
 // ================================================================================================================
 // Login Page
 // ================================================================================================================
+
 const AlurakutLoginScreen = css`
   :root {
-    --backgroundPrimary: #D9E6F6;
-    --backgroundSecondary: #F1F9FE;
-    --backgroundTertiary: #FFFFFF;
-    --backgroundQuarternary: #BBCDE8;
-    --colorPrimary: #2E7BB4;
-    --colorSecondary: #388BB0;
-    --colorTertiary: #2F4A71;
-    --colorQuarternary: #D81D99;
-    --textPrimaryColor: #333333;
+    --backgroundPrimary: #22272E;
+    --backgroundSecondary: #2D333B;
+    --backgroundTertiary: #1F242B;
+    --backgroundQuarternary: #2D333B;
+    --colorPrimary: #4A88D5;
+    --colorSecondary: #4A88D5;
+    --colorTertiary: #4A88D5;
+    --colorQuarternary: #ADBAC7;
+    --textPrimaryColor: #ADBAC7;
     --textSecondaryColor: #FFFFFF;
     --textTertiaryColor: #5A5A5A;
-    --textQuarternaryColor: #C5C6CA;
+    --textQuarternaryColor: #373E47;
     --commonRadius: 8px;
   }
   .loginScreen {
@@ -353,9 +354,10 @@ const AlurakutLoginScreen = css`
               "logoArea formArea"
               "footerArea footerArea";
     }
+    
     .logoArea {
       grid-area: logoArea;
-      background-color: var(--backgroundTertiary);
+      background-color: var(--backgroundSecondary);
       border-radius: var(--commonRadius);
       padding: var(--gutter);
       text-align: center;
@@ -379,9 +381,9 @@ const AlurakutLoginScreen = css`
         }
       }
       img {
-        max-height: 45px;
+        max-height: 60px;
         margin-bottom: 36px;
-      }
+      } 
     }
     .formArea {
       grid-area: formArea;
@@ -425,6 +427,7 @@ const AlurakutLoginScreen = css`
           border-radius: var(--commonRadius);
           margin-top: 24px;
           margin-bottom: 16px;
+          color: var(--colorQuarternary)
         }
         button {
           width: 100%;

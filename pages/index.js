@@ -1,4 +1,6 @@
 import { React, useState, useEffect } from 'react'
+import nookies from 'nookies';
+import jwt from 'jsonwebtoken';
 
 import MainGrid from '../src/components/MainGrid'
 import DivGrid from '../src/components/DivGrid'
@@ -29,7 +31,7 @@ function ProfileRelationsBox(props) {
   return (
     <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-            {props.title} ({props.items.length})
+            {props.title} ({props.count})
             </h2>
              <ul>
               {props.items.map((currentItem) => {
@@ -43,13 +45,18 @@ function ProfileRelationsBox(props) {
                 )
               }).slice(0,6)}
             </ul>
+            {props.count > 6 ?  <a href="" className="viewAll">Ver todos</a> : ''}
+            
           </ProfileRelationsBoxWrapper>
   )
 }
 
-export default function Home() {
+export default function Home(props) {
   const [communities, setCommunities] = useState([])
-  const user = 'lailsonlm';
+  const user = props.githubUser;
+
+  const communityByUser = communities.filter((obj) => obj.creatorSlug == user)
+
   const favoritePeople = [
     'juunegreiros',
     'omariosouto',
@@ -58,9 +65,14 @@ export default function Home() {
   ]
 
   const [followers, setFollowers] = useState([])
+  const [followersCount, setFollowersCount] = useState([])
 
   useEffect(() => {
-    fetch('https://api.github.com/users/lailsonlm/followers').then((res) => res.json()).then((res) => setFollowers(res))
+    fetch(`https://api.github.com/users/${user}/followers`).then((res) => res.json()).then((res) => setFollowers(res))
+
+    // Count Followers
+    fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowersCount(res.followers))
+
 
     // API GraphQL
     fetch('https://graphql.datocms.com/', {
@@ -82,7 +94,7 @@ export default function Home() {
     .then((res) => res.json())
     .then((res) => {
       const communitiesDatoCms = res.data.allCommunities
-      setCommunities(communitiesDatoCms)
+      setCommunities(communitiesDatoCms)     
     })
   }, [])
 
@@ -109,13 +121,9 @@ export default function Home() {
       console.log(data.communityCreated)
 
       const community = data.communityCreated
-      setCommunities([...communities, community])
+      setCommunities([community,...communities])
     })
-
-    // setCommunities([...communities, community])
-
   }
-
 
   return (
     <>
@@ -158,14 +166,15 @@ export default function Home() {
         </DivGrid>
 
         <DivGrid className="profileRelations">
-          <ProfileRelationsBox title="Seguidores" items={followers}/>
+          <ProfileRelationsBox title="Seguidores" items={followers} count={followersCount}/>
 
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-              Comunidades ({communities.length})
+              Comunidades ({communityByUser.length})
             </h2>
             <ul>
-              {communities.map((currentItem) => {
+            {communityByUser.map((currentItem) => {
+              if(currentItem.creatorSlug == user){
                 return (
                   <li key={currentItem.id}>
                     <a href={`/communities/${currentItem.id}`} >
@@ -174,8 +183,10 @@ export default function Home() {
                     </a>
                   </li>
                 )
-              })}
+              }
+            }).slice(0,6)}
             </ul>
+            {communityByUser.length == 0 ? 'Você não possui nenhuma comunidade' : communityByUser.length > 6 ?  <a href="" className="viewAll">Ver todas</a> : ''}
           </ProfileRelationsBoxWrapper>
 
           <ProfileRelationsBoxWrapper>
@@ -203,3 +214,34 @@ export default function Home() {
 }
 
 
+export async function getServerSideProps(context) {
+  const cookies = nookies.get(context)
+  const token = cookies.USER_TOKEN
+
+  
+  const { isAuthenticated } = await fetch('http://localhost:3000/api/auth', {
+    headers: {
+      Authorization: token,
+    }
+  }).then((res) => res.json())
+  
+  console.log('isAuthenticated', isAuthenticated)
+  
+  if(!isAuthenticated) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  }
+
+  const { githubUser } = jwt.decode(token)
+  
+  return {
+    props: {
+      githubUser,
+      isAuthenticated
+    },
+  }
+}

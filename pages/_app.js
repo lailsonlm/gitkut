@@ -15,7 +15,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
 
-    background: #D9E6F6;
+    background: #22272E;
+    color: #ADBAC7;
     font-family: sans-serif;
   }
 
