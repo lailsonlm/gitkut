@@ -219,7 +219,7 @@ export async function getServerSideProps(context) {
   const token = cookies.USER_TOKEN
 
   
-  const { isAuthenticated } = await fetch('http://localhost:3000/api/auth', {
+  const { isAuthenticated } = await fetch('https://gitkut-lailsonlm.vercel.app/api/auth', {
     headers: {
       Authorization: token,
     }
