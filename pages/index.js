@@ -66,12 +66,21 @@ export default function Home(props) {
 
   const [followers, setFollowers] = useState([])
   const [followersCount, setFollowersCount] = useState([])
+  
+  const [following, setFollowing] = useState([])
+  const [followingCount, setFollowingCount] = useState([])
 
   useEffect(() => {
     fetch(`https://api.github.com/users/${user}/followers`).then((res) => res.json()).then((res) => setFollowers(res))
 
     // Count Followers
     fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowersCount(res.followers))
+
+
+    fetch(`https://api.github.com/users/${user}/following`).then((res) => res.json()).then((res) => setFollowing(res))
+
+    // Count Following
+    fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowingCount(res.following))
 
 
     // API GraphQL
@@ -168,6 +177,8 @@ export default function Home(props) {
         <DivGrid className="profileRelations">
           <ProfileRelationsBox title="Seguidores" items={followers} count={followersCount}/>
 
+          <ProfileRelationsBox title="Seguindo" items={following} count={followingCount}/>
+
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({communityByUser.length})
@@ -189,9 +200,9 @@ export default function Home(props) {
             {communityByUser.length == 0 ? 'Você não possui nenhuma comunidade' : communityByUser.length > 6 ?  <a href="" className="viewAll">Ver todas</a> : ''}
           </ProfileRelationsBoxWrapper>
 
-          <ProfileRelationsBoxWrapper>
+          {/* <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-              Pessoas da comunidade ({favoritePeople.length})
+              Seguindo ({favoritePeople.length})
             </h2>
 
             <ul>
@@ -206,7 +217,7 @@ export default function Home(props) {
                 )
               })}
             </ul>
-          </ProfileRelationsBoxWrapper>
+          </ProfileRelationsBoxWrapper> */}
         </DivGrid>
       </MainGrid>
     </>

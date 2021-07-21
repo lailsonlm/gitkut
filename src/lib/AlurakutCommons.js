@@ -36,7 +36,7 @@ export function AlurakutMenu({ githubUser }) {
         </nav>
 
         <nav>
-          <a href={`/logout`}>
+          <a href={`/login`}>
             Sair
           </a>
           <div>
@@ -56,8 +56,9 @@ export function AlurakutMenu({ githubUser }) {
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
   background-color: #2D333B;
+
   .alurakutMenuProfileSidebar {
-    background: white;
+    background: #22272E;
     position: fixed;
     z-index: 100;
     padding: 46px;
@@ -66,6 +67,7 @@ AlurakutMenu.Wrapper = styled.header`
     right: 0;
     top: 48px;
     transition: .3s;
+    height: 100vh;
     pointer-events: ${({ isMenuOpen }) => isMenuOpen ? 'all' : 'none'};
     opacity: ${({ isMenuOpen }) => isMenuOpen ? '1' : '0'};
     transform: ${({ isMenuOpen }) => isMenuOpen ? 'translateY(0)' : 'translateY(calc(-100% - 48px))'};
@@ -90,7 +92,7 @@ AlurakutMenu.Wrapper = styled.header`
       margin-top: 12px;
       margin-bottom: 8px;
       border-color: transparent;
-      border-bottom-color: #ECF2FA;
+      border-bottom-color: #2D333B;
     }
   }
   .container {
@@ -328,8 +330,8 @@ const AlurakutLoginScreen = css`
     --backgroundQuarternary: #2D333B;
     --colorPrimary: #4A88D5;
     --colorSecondary: #4A88D5;
-    --colorTertiary: #4A88D5;
-    --colorQuarternary: #ADBAC7;
+    --colorTertiary: #ADBAC7;
+    --colorQuarternary: #4A88D5;
     --textPrimaryColor: #ADBAC7;
     --textSecondaryColor: #FFFFFF;
     --textTertiaryColor: #5A5A5A;
@@ -418,6 +420,9 @@ const AlurakutLoginScreen = css`
           text-decoration: none;
           color: var(--colorPrimary);
         }
+        strong {
+          color: var(--colorQuarternary);
+        }
         input {
           width: 100%;
           display: block;
@@ -427,7 +432,7 @@ const AlurakutLoginScreen = css`
           border-radius: var(--commonRadius);
           margin-top: 24px;
           margin-bottom: 16px;
-          color: var(--colorQuarternary)
+          color: var(--colorTertiary)
         }
         button {
           width: 100%;
