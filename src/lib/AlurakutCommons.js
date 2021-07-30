@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import NextLink from 'next/link';
+import MainGrid from '../components/MainGrid';
 
 const BASE_URL = 'http://alurakut.vercel.app/';
 const v = '1';
@@ -45,7 +46,7 @@ export function AlurakutMenu({ githubUser }) {
 
         <button onClick={() => setMenuState(!isMenuOpen)}>
           {isMenuOpen && <img src={`${BASE_URL}/icons/menu-open.svg?v=${v}`} />}
-          {!isMenuOpen && <img src={`${BASE_URL}/icons/menu-closed.svg?v=${v}`} />}
+          {!isMenuOpen && <img src={`${BASE_URL}/icons/menu-closed.svg?v=${v}`}/> }
         </button>
       </div>
       <AlurakutMenuProfileSidebar githubUser={githubUser} />
@@ -56,27 +57,31 @@ AlurakutMenu.Wrapper = styled.header`
   width: 100%;
   background-color: #2D333B;
   position: fixed;
-  z-index: 1000;
+  z-index: 100;
 
   .alurakutMenuProfileSidebar {
     background: #22272E;
-    position: fixed;
+    position: absolute;
     z-index: 100;
     padding: 46px;
     bottom: 0;
     left: 0;
     right: 0;
-    top: 48px;
+    top: 0px;
+    margin-top: 30px;
     transition: .3s;
+    width:100%;
     height: 100vh;
+    overflow: auto;
     pointer-events: ${({ isMenuOpen }) => isMenuOpen ? 'all' : 'none'};
     opacity: ${({ isMenuOpen }) => isMenuOpen ? '1' : '0'};
-    transform: ${({ isMenuOpen }) => isMenuOpen ? 'translateY(0)' : 'translateY(calc(-100% - 48px))'};
+    transform: ${({ isMenuOpen }) => isMenuOpen ? 'translateY(0)' : 'translateY(calc(-100% - 30px))'};
     @media(min-width: 860px) {
       display: none;
     }
     > div {
       max-width: 400px;
+      min-height: 100%;
       margin: auto;
     }
     a {

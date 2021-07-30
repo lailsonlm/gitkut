@@ -8,6 +8,7 @@ const MainGrid = styled.main`
   width: 100%;
   max-width: 500px;
   margin: 50px auto 0;
+
   
   @media(min-width: 860px) {
     max-width: 1110px;

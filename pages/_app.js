@@ -1,4 +1,5 @@
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import Head from 'next/head';
 
 import { AlurakutStyles } from '../src/lib/AlurakutCommons'
 
@@ -8,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -50,6 +52,10 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
+      <Head>
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <title>Gitkut</title>
+    </Head>
       <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>

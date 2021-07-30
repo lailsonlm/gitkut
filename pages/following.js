@@ -1,6 +1,5 @@
 import nookies from 'nookies';
 import jwt from 'jsonwebtoken';
-
 import { React, useEffect, useState } from 'react';
 
 import { AlurakutMenu } from '../src/lib/AlurakutCommons'
@@ -10,7 +9,7 @@ import ProfileSidebar from '../src/components/ProfileSidebar';
 import Box from '../src/components/Box';
 import styled from 'styled-components';
 
-export const FollowersBoxWrapper = styled.div`
+export const FollowingBoxWrapper = styled.div`
   ul {
     display: grid;
     grid-gap: 10px;
@@ -64,7 +63,7 @@ export const FollowersBoxWrapper = styled.div`
 `;
 
 
-function FollowersRelationsBox(props) {
+function FollowingRelationsBox(props) {
     // const [followerLocation, setFollowerLocation] = useState('')
     // props.items.map((currentItem) => {
     //     const test = currentItem.login
@@ -76,7 +75,7 @@ function FollowersRelationsBox(props) {
 
     return (
         <>
-            <FollowersBoxWrapper>
+            <FollowingBoxWrapper>
                 <h1 className="title">
                     {props.title} ({props.count})
                 </h1>
@@ -93,28 +92,28 @@ function FollowersRelationsBox(props) {
                     ))}
                     <li id="next-pag"></li>
                 </ul>
-            </FollowersBoxWrapper>
+            </FollowingBoxWrapper>
         </>
     )
 }
 
-export default function Followers(props) {
+export default function Following(props) {
     const user = props.githubUser;
 
-    const [followers, setFollowers] = useState([])
-    const [followersCount, setFollowersCount] = useState([])
+    const [following, setFollowing] = useState([])
+    const [followingCount, setFollowingCount] = useState([])
 
     const [currentPage, setCurrentPage] = useState(1)
 
     useEffect(() => {
-        const ENDPOINT = `https://api.github.com/users/${user}/followers`
+        const ENDPOINT = `https://api.github.com/users/${user}/following`
         const URL_CONFIG = `${ENDPOINT}?per_page=10&page=${currentPage}&order=DESC`
-        fetch(URL_CONFIG).then((res) => res.json()).then((newFollowers) => setFollowers((prevFollowers) => [...prevFollowers, ...newFollowers]))
+        fetch(URL_CONFIG).then((res) => res.json()).then((newFollowing) => setFollowing((prevFollowing) => [...prevFollowing, ...newFollowing]))
     }, [currentPage])
 
     useEffect(() => {
-        // Count Followers
-        fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowersCount(res.followers))
+        // Count Following
+        fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowingCount(res.following))
     }, [])
 
     useEffect(() => {
@@ -140,9 +139,9 @@ export default function Followers(props) {
                 </DivGrid>
 
                 <DivGrid className="welcomeArea">
-                    <FollowersRelationsBox title="Seguidores" items={followers} count={followersCount} />
+                    <FollowingRelationsBox title="Seguindo" items={following} count={followingCount} />
                 </DivGrid>
-                {followersCount > 10 ? <button id="top" onClick={() => {
+                {followingCount > 10 ? <button id="top" onClick={() => {
                     addEventListener('click', () => window.scrollTo(0, 0))
                 }}>
                     <img src="/up_arrow.svg" alt="Voltar ao Topo" />

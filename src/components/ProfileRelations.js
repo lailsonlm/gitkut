@@ -40,6 +40,7 @@ export const ProfileRelationsBoxWrapper = styled(Box)`
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
     }
+    
     &:after {
       content: "";
       display: block;
@@ -80,7 +81,7 @@ function ProfileRelationsBox(props) {
                 )
               }).slice(0,6)}
             </ul>
-            {props.count > 6 ?  <a href={`/followers`} className="viewAll">Ver todos</a> : ''}
+            {props.count > 6 ?  <a href={props.link} className="viewAll">Ver todos</a> : ''}
             
           </ProfileRelationsBoxWrapper>
   )
@@ -135,9 +136,9 @@ export default function ProfileRelations(props) {
 
   return (
     <DivGrid className="profileRelations">
-          <ProfileRelationsBox title="Seguidores" items={followers} count={followersCount}/>
+          <ProfileRelationsBox title="Seguidores" items={followers} count={followersCount} link="/followers"/>
 
-          <ProfileRelationsBox title="Seguindo" items={following} count={followingCount}/>
+          <ProfileRelationsBox title="Seguindo" items={following} count={followingCount} link="/following"/>
 
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
