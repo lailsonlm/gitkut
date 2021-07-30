@@ -7,6 +7,8 @@ export default function LoginScreen() {
   const router = useRouter();
   const [githubUser, setGithubUser] = useState('');
 
+  nookies.destroy(null, 'USER_TOKEN')
+
   return (
     <main style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <div className="loginScreen">

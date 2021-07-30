@@ -18,4 +18,4 @@ const DivGrid = styled.div`
   }
   `;
 
-export default DivGrid
+export default DivGrid;

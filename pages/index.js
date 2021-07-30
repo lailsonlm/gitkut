@@ -1,111 +1,25 @@
-import { React, useState, useEffect } from 'react'
+import { React, useEffect, useState } from 'react'
 import nookies from 'nookies';
 import jwt from 'jsonwebtoken';
 
 import MainGrid from '../src/components/MainGrid'
 import DivGrid from '../src/components/DivGrid'
 import Box from '../src/components/Box'
-import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
+import ProfileSidebar from '../src/components/ProfileSidebar';
+import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
+import ProfileRelations from '../src/components/ProfileRelations'
 
-function ProfileSidebar(props) {
-  return (
-    <Box as="aside">
-      <img src={`https://github.com/${props.user}.png`} alt="Perfil Usuário" className="imgProfile" />
-      <hr />
+<ProfileSidebar />
 
-      <p>
-        <a className="boxLink" href={`https://github.com/${props.user}`}>
-          @{props.user}
-        </a>
-      </p>
-
-      <hr />
-
-      <AlurakutProfileSidebarMenuDefault />
-    </Box>
-  )
-}
-
-function ProfileRelationsBox(props) {
-  return (
-    <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-            {props.title} ({props.count})
-            </h2>
-             <ul>
-              {props.items.map((currentItem) => {
-                return (
-                  <li key={currentItem.login}>
-                    <a href={`https://github.com/${currentItem.login}`} target= '_blank' >
-                      {<img src={`https://github.com/${currentItem.login}.png`} alt="Perfil Usuário" className="imgProfile" />}
-                      <span>{currentItem.login}</span>
-                    </a>
-                  </li>
-                )
-              }).slice(0,6)}
-            </ul>
-            {props.count > 6 ?  <a href="" className="viewAll">Ver todos</a> : ''}
-            
-          </ProfileRelationsBoxWrapper>
-  )
-}
 
 export default function Home(props) {
-  const [communities, setCommunities] = useState([])
   const user = props.githubUser;
-
-  const communityByUser = communities.filter((obj) => obj.creatorSlug == user)
-
-  const favoritePeople = [
-    'juunegreiros',
-    'omariosouto',
-    'peas',
-    'rafaballerini',
-  ]
-
-  const [followers, setFollowers] = useState([])
-  const [followersCount, setFollowersCount] = useState([])
-  
-  const [following, setFollowing] = useState([])
-  const [followingCount, setFollowingCount] = useState([])
+  const [userName, setUserName] = useState('')
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${user}/followers`).then((res) => res.json()).then((res) => setFollowers(res))
-
-    // Count Followers
-    fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowersCount(res.followers))
-
-
-    fetch(`https://api.github.com/users/${user}/following`).then((res) => res.json()).then((res) => setFollowing(res))
-
-    // Count Following
-    fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setFollowingCount(res.following))
-
-
-    // API GraphQL
-    fetch('https://graphql.datocms.com/', {
-      method: 'POST',
-      headers: {
-        'Authorization': '9872abdb78da424fa4717c32f47cb2',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({ "query": `query {
-        allCommunities {
-          id
-          title
-          imageUrl
-          creatorSlug
-        }
-      }` })
-    })
-    .then((res) => res.json())
-    .then((res) => {
-      const communitiesDatoCms = res.data.allCommunities
-      setCommunities(communitiesDatoCms)     
-    })
+    fetch(`https://api.github.com/users/${user}`).then((res) => res.json()).then((res) => setUserName(res.name.split(' ').slice(0,1)))
   }, [])
+
 
   function CreateCommunity(event) {
     event.preventDefault()
@@ -145,9 +59,8 @@ export default function Home(props) {
         <DivGrid className="welcomeArea">
           <Box>
             <h1 className="title">
-              Bem-vindo(a)
+              Bem-vindo(a), {userName}!
             </h1>
-
             <OrkutNostalgicIconSet />
           </Box>
 
@@ -174,51 +87,7 @@ export default function Home(props) {
           </Box>
         </DivGrid>
 
-        <DivGrid className="profileRelations">
-          <ProfileRelationsBox title="Seguidores" items={followers} count={followersCount}/>
-
-          <ProfileRelationsBox title="Seguindo" items={following} count={followingCount}/>
-
-          <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Comunidades ({communityByUser.length})
-            </h2>
-            <ul>
-            {communityByUser.map((currentItem) => {
-              if(currentItem.creatorSlug == user){
-                return (
-                  <li key={currentItem.id}>
-                    <a href={`/communities/${currentItem.id}`} >
-                      {<img src={currentItem.imageUrl} alt="Capa da Comunidade" className="imgProfile" />}
-                      <span>{currentItem.title}</span>
-                    </a>
-                  </li>
-                )
-              }
-            }).slice(0,6)}
-            </ul>
-            {communityByUser.length == 0 ? 'Você não possui nenhuma comunidade' : communityByUser.length > 6 ?  <a href="" className="viewAll">Ver todas</a> : ''}
-          </ProfileRelationsBoxWrapper>
-
-          {/* <ProfileRelationsBoxWrapper>
-            <h2 className="smallTitle">
-              Seguindo ({favoritePeople.length})
-            </h2>
-
-            <ul>
-              {favoritePeople.map((currentItem) => {
-                return (
-                  <li key={currentItem}>
-                    <a href={`/users/${currentItem}`} >
-                      <img src={`https://github.com/${currentItem}.png`} alt="Perfil Usuário" className="imgProfile" />
-                      <span>{currentItem}</span>
-                    </a>
-                  </li>
-                )
-              })}
-            </ul>
-          </ProfileRelationsBoxWrapper> */}
-        </DivGrid>
+        <ProfileRelations user={user} />
       </MainGrid>
     </>
   )
